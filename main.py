@@ -21,16 +21,16 @@ def main():
 
 	# Устанавливаем заголовочный текст в окне приложения
 	label = QLabel(window)
-	label.setText("Решение комплекса задач, моделирующих деятельность предприятия")
+	label.setText("ООО 'ПромШпон'")
 	label.setFont(QFont("Arial", 13))
 	label.move(25, 20)
 
 	# Рисуем кнопки для каждой задачи
-	button1 = QPushButton("Задача распределения людей по работам проекта")
-	button2 = QPushButton("Задача распределения денежных средств на пиар кампанию")
-	button3 = QPushButton("Задача маршрутизации")
-	button4 = QPushButton("Задача раскроя и упаковки")
-	button5 = QPushButton("Задача теории игр")
+	button1 = QPushButton("Производственный отдел (распределение бригад)")
+	button2 = QPushButton("Отдел маркетинга")
+	button3 = QPushButton("Складской отдел")
+	button4 = QPushButton("Производственный отдел (нарезка комплектов)")
+	button5 = QPushButton("Отдел кадров")
 
 	# Привязываем слушатель (event) к каждой кнопке при ее нажатии
 	button1.clicked.connect(on_button1_clicked)
@@ -52,13 +52,6 @@ def main():
 	# Показываем окно и запускаем приложение
 	window.show()
 	sys.exit(app.exec_())
-
-""" Выводит сообщение в виде диалогового окна """
-def show_message(msg):
-	message = QMessageBox()
-	message.setWindowTitle('Получено решение!')
-	message.setText(msg)
-	message.exec_()
 
 """ Задача распределения людей по работам проекта """
 def on_button1_clicked():
@@ -107,18 +100,50 @@ def on_button1_clicked():
 	prob.solve()
 
 	# Форматируем вывод на экран
-	output = '№  шпона:  1 | 2 | 3\n'
-	output += 'Бригада 1: ' + str(math.floor(x11.value())) + ' | ' + str(math.floor(x12.value())) + ' | ' + str(math.floor(x13.value())) + '\n'
-	output += 'Бригада 2: ' + str(math.floor(x21.value())) + ' | ' + str(math.floor(x22.value())) + ' | ' + str(math.floor(x23.value())) + '\n'
-	output += 'Бригада 3: ' + str(math.floor(x31.value())) + ' | ' + str(math.floor(x32.value())) + ' | ' + str(math.floor(x33.value())) + '\n'
-	output += '-----------------------------\n'
-	totalTime = x11.value() * a11 + x12.value() * a12 + x13.value() * a13 + x21.value() * a21 + x22.value() * a22 + x23.value() * a23 + x31.value() * a31 + x32.value() * a32 + x33.value() * a33
-	output += 'Затраченное время = ' + str(math.floor(totalTime)) + 'ч.\n'
-	totalIncome = x11.value() * income1 + x21.value() * income1 + x31.value() * income1 + x12.value() * income2 + x22.value() * income2 + x32.value() * income2 + x13.value() * income3 + x23.value() * income3 + x33.value() * income3
-	output += 'Конечный доход = ' + str(math.floor(totalIncome)) + 'ден.ед.'
+	table_widget = QTableWidget()
+	table_widget.setRowCount(5)  
+	table_widget.setColumnCount(4) 
 
-	# Показываем сообщение пользователю
-	show_message(output)
+	table_widget.setHorizontalHeaderLabels(['На пересечение кол-во часов на выпуск продукции', 'Шпон березовый лущенный', 'Шпон с закориной', 'Шпон кусковой'])
+
+	table_widget.setItem(0, 0, QTableWidgetItem('Рабочие в бригаде №1'))
+	table_widget.setItem(1, 0, QTableWidgetItem('Рабочие в бригаде №2'))
+	table_widget.setItem(2, 0, QTableWidgetItem('Рабочие в бригаде №3'))
+
+	table_widget.setItem(0, 1, QTableWidgetItem(str(math.floor(x11.value()))))
+	table_widget.setItem(1, 1, QTableWidgetItem(str(math.floor(x21.value()))))
+	table_widget.setItem(2, 1, QTableWidgetItem(str(math.floor(x31.value()))))
+
+	table_widget.setItem(0, 2, QTableWidgetItem(str(math.floor(x12.value()))))
+	table_widget.setItem(1, 2, QTableWidgetItem(str(math.floor(x22.value()))))
+	table_widget.setItem(2, 2, QTableWidgetItem(str(math.floor(x32.value()))))
+
+	table_widget.setItem(0, 3, QTableWidgetItem(str(math.floor(x13.value()))))
+	table_widget.setItem(1, 3, QTableWidgetItem(str(math.floor(x23.value()))))
+	table_widget.setItem(2, 3, QTableWidgetItem(str(math.floor(x33.value()))))
+
+	totalTime = x11.value() * a11 + x12.value() * a12 + x13.value() * a13 + x21.value() * a21 + x22.value() * a22 + x23.value() * a23 + x31.value() * a31 + x32.value() * a32 + x33.value() * a33
+	table_widget.setItem(3, 0, QTableWidgetItem('Суммарное затраченное время (ч.)'))
+	table_widget.setItem(3, 1, QTableWidgetItem(str(math.floor(totalTime))))
+
+	totalIncome = x11.value() * income1 + x21.value() * income1 + x31.value() * income1 + x12.value() * income2 + x22.value() * income2 + x32.value() * income2 + x13.value() * income3 + x23.value() * income3 + x33.value() * income3
+	table_widget.setItem(4, 0, QTableWidgetItem('Суммарный доход (ден.ед)'))
+	table_widget.setItem(4, 1, QTableWidgetItem(str(math.floor(totalIncome))))
+
+	table_widget.resizeColumnsToContents()
+
+	layout = QVBoxLayout()
+	layout.addWidget(table_widget)
+
+	widget = QWidget()
+	widget.setLayout(layout)
+	widget.setMinimumWidth(750)
+	widget.setMinimumHeight(200)
+
+	message = QMessageBox()
+	message.setWindowTitle('Получено решение!')
+	message.layout().addWidget(widget)
+	message.exec_()
 
 """ Задача распределения денежных средств на пиар кампанию """
 def on_button2_clicked():
@@ -148,7 +173,10 @@ def on_button2_clicked():
 	output += 'Затрачено денег: ' + str(math.floor(xInternet.value() * 50 + xTV.value() * 1_000)) + 'руб.'
 
 	# Показываем сообщение пользователю
-	show_message(output)
+	message = QMessageBox()
+	message.setWindowTitle('Получено решение!')
+	message.setText(output)
+	message.exec_()
 
 """ Задача маршрутизации """
 def on_button3_clicked():
@@ -194,16 +222,46 @@ def on_button3_clicked():
 	prob.solve()
 
 	# Форматируем вывод на экран
-	output = 'Потребители: 1 | 2 | 3\n'
-	output += 'г. Казань:       ' + str(math.floor(x11.value())) + ' | ' + str(math.floor(x12.value())) + ' | '  + str(math.floor(x13.value())) + '\n'
-	output += 'г. Киров:         ' + str(math.floor(x21.value())) + ' | ' + str(math.floor(x22.value())) + ' | '  + str(math.floor(x23.value())) + '\n'
-	output += 'г. Пермь:        ' + str(math.floor(x31.value())) + ' | ' + str(math.floor(x32.value())) + ' | '  + str(math.floor(x33.value())) + '\n'
-	output += '--------------------------------\n'
-	totalDistance = math.floor(x11.value() * a11 + x12.value() * a12 + x13.value() * a13 + x21.value() * a21 + x22.value() * a22 + x23.value() * a23 + x31.value() * a31 + x32.value() * a32 + x33.value() * a33)
-	output += 'Суммарная дальность поездки: ' + str(totalDistance)
+	table_widget = QTableWidget()
+	table_widget.setRowCount(4)  
+	table_widget.setColumnCount(4) 
 
-	# Показываем сообщение пользователю
-	show_message(output)
+	table_widget.setHorizontalHeaderLabels(['Склады', 'Потребитель №1', 'Потребитель №2', 'Потребитель №3'])
+
+	table_widget.setItem(0, 0, QTableWidgetItem('г. Казань'))
+	table_widget.setItem(1, 0, QTableWidgetItem('г. Киров'))
+	table_widget.setItem(2, 0, QTableWidgetItem('г. Пермь'))
+
+	table_widget.setItem(0, 1, QTableWidgetItem(str(math.floor(x11.value()))))
+	table_widget.setItem(1, 1, QTableWidgetItem(str(math.floor(x21.value()))))
+	table_widget.setItem(2, 1, QTableWidgetItem(str(math.floor(x31.value()))))
+
+	table_widget.setItem(0, 2, QTableWidgetItem(str(math.floor(x12.value()))))
+	table_widget.setItem(1, 2, QTableWidgetItem(str(math.floor(x22.value()))))
+	table_widget.setItem(2, 2, QTableWidgetItem(str(math.floor(x32.value()))))
+
+	table_widget.setItem(0, 3, QTableWidgetItem(str(math.floor(x13.value()))))
+	table_widget.setItem(1, 3, QTableWidgetItem(str(math.floor(x23.value()))))
+	table_widget.setItem(2, 3, QTableWidgetItem(str(math.floor(x33.value()))))
+
+	totalDistance = math.floor(x11.value() * a11 + x12.value() * a12 + x13.value() * a13 + x21.value() * a21 + x22.value() * a22 + x23.value() * a23 + x31.value() * a31 + x32.value() * a32 + x33.value() * a33)
+	table_widget.setItem(3, 0, QTableWidgetItem('Суммарная дальность поездки (км.)'))
+	table_widget.setItem(3, 1, QTableWidgetItem(str(math.floor(totalDistance))))
+
+	table_widget.resizeColumnsToContents()
+
+	layout = QVBoxLayout()
+	layout.addWidget(table_widget)
+
+	widget = QWidget()
+	widget.setLayout(layout)
+	widget.setMinimumWidth(600)
+	widget.setMinimumHeight(180)
+
+	message = QMessageBox()
+	message.setWindowTitle('Получено решение!')
+	message.layout().addWidget(widget)
+	message.exec_()
 
 """ Задача раскроя и упаковки """
 def on_button4_clicked():
@@ -246,7 +304,10 @@ def on_button4_clicked():
 	output += 'Кол-во комплектов: ' + str(math.floor((x11.value() * a11 + x12.value() * a12 + x13.value() * a13 + x14.value() * a14) / 3))
 
 	# Показываем сообщение пользователю
-	show_message(output)
+	message = QMessageBox()
+	message.setWindowTitle('Получено решение!')
+	message.setText(output)
+	message.exec_()
 
 """ Задача теории игр """
 def on_button5_clicked():
@@ -357,22 +418,75 @@ def on_button5_clicked():
 	prob.solve()
 
 	# Форматируем вывод на экран
-	output = str(math.floor(x11.value())) + ' | ' + str(math.floor(x12.value())) + ' | ' + str(math.floor(x13.value())) + ' | ' + str(math.floor(x14.value())) + ' | ' + str(math.floor(x15.value())) + ' | ' + str(math.floor(x16.value())) + '\n'
-	output += str(math.floor(x21.value())) + ' | ' + str(math.floor(x22.value())) + ' | ' + str(math.floor(x23.value())) + ' | ' + str(math.floor(x24.value())) + ' | ' + str(math.floor(x25.value())) + ' | ' + str(math.floor(x26.value())) + '\n'
-	output += str(math.floor(x31.value())) + ' | ' + str(math.floor(x32.value())) + ' | ' + str(math.floor(x33.value())) + ' | ' + str(math.floor(x34.value())) + ' | ' + str(math.floor(x35.value())) + ' | ' + str(math.floor(x36.value())) + '\n'
-	output += str(math.floor(x41.value())) + ' | ' + str(math.floor(x42.value())) + ' | ' + str(math.floor(x43.value())) + ' | ' + str(math.floor(x44.value())) + ' | ' + str(math.floor(x45.value())) + ' | ' + str(math.floor(x46.value())) + '\n'
-	output += str(math.floor(x51.value())) + ' | ' + str(math.floor(x52.value())) + ' | ' + str(math.floor(x53.value())) + ' | ' + str(math.floor(x54.value())) + ' | ' + str(math.floor(x55.value())) + ' | ' + str(math.floor(x56.value())) + '\n'
-	output += str(math.floor(x61.value())) + ' | ' + str(math.floor(x62.value())) + ' | ' + str(math.floor(x63.value())) + ' | ' + str(math.floor(x64.value())) + ' | ' + str(math.floor(x65.value())) + ' | ' + str(math.floor(x66.value())) + '\n'
-	finalIndex = math.floor(x11.value() * a11 + x12.value() * a12 + x13.value() * a13 + x14.value() * a14 + x15.value() * a15 + x16.value() * a16 + \
-         x21.value() * a21 + x22.value() * a22 + x23.value() * a23 + x24.value() * a24 + x25.value() * a25 + x26.value() * a26 + \
-         x31.value() * a31 + x32.value() * a32 + x33.value() * a33 + x34.value() * a34 + x35.value() * a35 + x36.value() * a36 + \
-         x41.value() * a41 + x42.value() * a42 + x43.value() * a43 + x44.value() * a44 + x45.value() * a45 + x46.value() * a46 + \
-         x51.value() * a51 + x52.value() * a52 + x53.value() * a53 + x54.value() * a54 + x55.value() * a55 + x56.value() * a56 + \
-         x61.value() * a61 + x62.value() * a62 + x63.value() * a63 + x64.value() * a64 + x65.value() * a65 + x66.value() * a66)
-	output += 'Целевая функция: ' + str(finalIndex)
+	table_widget = QTableWidget()
+	table_widget.setRowCount(6)  
+	table_widget.setColumnCount(7) 
 
-	# Показываем сообщение пользователю
-	show_message(output)
+	table_widget.setHorizontalHeaderLabels(['На пересечении индекс враждебности', 'Аня', 'Маша', 'Катя', 'Лиза', 'Ольга', 'Софья'])
+
+	table_widget.setItem(0, 0, QTableWidgetItem('Иван'))
+	table_widget.setItem(1, 0, QTableWidgetItem('Михаил'))
+	table_widget.setItem(2, 0, QTableWidgetItem('Павел'))
+	table_widget.setItem(3, 0, QTableWidgetItem('Николай'))
+	table_widget.setItem(4, 0, QTableWidgetItem('Алексей'))
+	table_widget.setItem(5, 0, QTableWidgetItem('Петр'))
+
+	table_widget.setItem(0, 1, QTableWidgetItem(str(math.floor(x11.value()))))
+	table_widget.setItem(1, 1, QTableWidgetItem(str(math.floor(x21.value()))))
+	table_widget.setItem(2, 1, QTableWidgetItem(str(math.floor(x31.value()))))
+	table_widget.setItem(3, 1, QTableWidgetItem(str(math.floor(x41.value()))))
+	table_widget.setItem(4, 1, QTableWidgetItem(str(math.floor(x51.value()))))
+	table_widget.setItem(5, 1, QTableWidgetItem(str(math.floor(x61.value()))))
+
+	table_widget.setItem(0, 2, QTableWidgetItem(str(math.floor(x12.value()))))
+	table_widget.setItem(1, 2, QTableWidgetItem(str(math.floor(x22.value()))))
+	table_widget.setItem(2, 2, QTableWidgetItem(str(math.floor(x32.value()))))
+	table_widget.setItem(3, 2, QTableWidgetItem(str(math.floor(x42.value()))))
+	table_widget.setItem(4, 2, QTableWidgetItem(str(math.floor(x52.value()))))
+	table_widget.setItem(5, 2, QTableWidgetItem(str(math.floor(x62.value()))))
+
+	table_widget.setItem(0, 3, QTableWidgetItem(str(math.floor(x13.value()))))
+	table_widget.setItem(1, 3, QTableWidgetItem(str(math.floor(x23.value()))))
+	table_widget.setItem(2, 3, QTableWidgetItem(str(math.floor(x33.value()))))
+	table_widget.setItem(3, 3, QTableWidgetItem(str(math.floor(x43.value()))))
+	table_widget.setItem(4, 3, QTableWidgetItem(str(math.floor(x53.value()))))
+	table_widget.setItem(5, 3, QTableWidgetItem(str(math.floor(x63.value()))))
+
+	table_widget.setItem(0, 4, QTableWidgetItem(str(math.floor(x14.value()))))
+	table_widget.setItem(1, 4, QTableWidgetItem(str(math.floor(x24.value()))))
+	table_widget.setItem(2, 4, QTableWidgetItem(str(math.floor(x34.value()))))
+	table_widget.setItem(3, 4, QTableWidgetItem(str(math.floor(x44.value()))))
+	table_widget.setItem(4, 4, QTableWidgetItem(str(math.floor(x54.value()))))
+	table_widget.setItem(5, 4, QTableWidgetItem(str(math.floor(x64.value()))))
+
+	table_widget.setItem(0, 5, QTableWidgetItem(str(math.floor(x15.value()))))
+	table_widget.setItem(1, 5, QTableWidgetItem(str(math.floor(x25.value()))))
+	table_widget.setItem(2, 5, QTableWidgetItem(str(math.floor(x35.value()))))
+	table_widget.setItem(3, 5, QTableWidgetItem(str(math.floor(x45.value()))))
+	table_widget.setItem(4, 5, QTableWidgetItem(str(math.floor(x55.value()))))
+	table_widget.setItem(5, 5, QTableWidgetItem(str(math.floor(x65.value()))))
+
+	table_widget.setItem(0, 6, QTableWidgetItem(str(math.floor(x16.value()))))
+	table_widget.setItem(1, 6, QTableWidgetItem(str(math.floor(x26.value()))))
+	table_widget.setItem(2, 6, QTableWidgetItem(str(math.floor(x36.value()))))
+	table_widget.setItem(3, 6, QTableWidgetItem(str(math.floor(x46.value()))))
+	table_widget.setItem(4, 6, QTableWidgetItem(str(math.floor(x56.value()))))
+	table_widget.setItem(5, 6, QTableWidgetItem(str(math.floor(x66.value()))))
+
+	table_widget.resizeColumnsToContents()
+
+	layout = QVBoxLayout()
+	layout.addWidget(table_widget)
+
+	widget = QWidget()
+	widget.setLayout(layout)
+	widget.setMinimumWidth(550)
+	widget.setMinimumHeight(250)
+
+	message = QMessageBox()
+	message.setWindowTitle('Получено решение!')
+	message.layout().addWidget(widget)
+	message.exec_()
 
 
 if __name__ == '__main__':
