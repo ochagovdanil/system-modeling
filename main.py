@@ -253,7 +253,7 @@ def on_button3_clicked():
 	table_widget.setRowCount(4)  
 	table_widget.setColumnCount(4) 
 
-	table_widget.setHorizontalHeaderLabels(['Склады', 'Потребитель №1', 'Потребитель №2', 'Потребитель №3'])
+	table_widget.setHorizontalHeaderLabels(['Пересечение складов и потребителей: 1 - грузовик из склада поедет до потребителя, 0 - не поедет', 'Потребитель №1', 'Потребитель №2', 'Потребитель №3'])
 
 	table_widget.setItem(0, 0, QTableWidgetItem('г. Казань'))
 	table_widget.setItem(1, 0, QTableWidgetItem('г. Киров'))
@@ -282,12 +282,12 @@ def on_button3_clicked():
 
 	widget = QWidget()
 	widget.setLayout(layout)
-	widget.setMinimumWidth(600)
+	widget.setMinimumWidth(1000)
 	widget.setMinimumHeight(180)
 
 	# Вывод в консоль
 	consoleTable = [
-    ['Склады', 'Потребитель №1', 'Потребитель №2', 'Потребитель №3'],
+    ['На пересечение складов и потребителей указано:\n1 - грузовик из склада поедет до потребителя\n0 - не поедет', 'Потребитель №1', 'Потребитель №2', 'Потребитель №3'],
     ["г. Казань", math.floor(x11.value()), math.floor(x12.value()), math.floor(x13.value())],
     ['г. Киров', math.floor(x21.value()), math.floor(x22.value()), math.floor(x23.value())],
     ['г. Пермь', math.floor(x31.value()), math.floor(x32.value()), math.floor(x33.value())]
@@ -474,7 +474,7 @@ def on_button5_clicked():
 	table_widget.setRowCount(6)  
 	table_widget.setColumnCount(7) 
 
-	table_widget.setHorizontalHeaderLabels(['На пересечении индекс враждебности', 'Аня', 'Маша', 'Катя', 'Лиза', 'Ольга', 'Софья'])
+	table_widget.setHorizontalHeaderLabels(['Пересечение: 1 - сотрудники в паре, 0 - сотрудники не в паре', 'Аня', 'Маша', 'Катя', 'Лиза', 'Ольга', 'Софья'])
 
 	table_widget.setItem(0, 0, QTableWidgetItem('Иван'))
 	table_widget.setItem(1, 0, QTableWidgetItem('Михаил'))
@@ -532,12 +532,12 @@ def on_button5_clicked():
 
 	widget = QWidget()
 	widget.setLayout(layout)
-	widget.setMinimumWidth(550)
+	widget.setMinimumWidth(700)
 	widget.setMinimumHeight(250)
 
 	# Вывод в консоль
 	consoleTable = [
-    ['На пересечении индекс враждебности', 'Аня', 'Маша', 'Катя', 'Лиза', 'Ольга', 'Софья'],
+    ['На пересечении:\n1 - сотрудники в паре\n0 - сотрудники не в паре', 'Аня', 'Маша', 'Катя', 'Лиза', 'Ольга', 'Софья'],
     ["Иван", math.floor(x11.value()), math.floor(x12.value()), math.floor(x13.value()), math.floor(x14.value()), math.floor(x15.value()), math.floor(x16.value())],
     ['Михаил', math.floor(x21.value()), math.floor(x22.value()), math.floor(x23.value()), math.floor(x24.value()), math.floor(x25.value()), math.floor(x26.value())],
     ['Павел', math.floor(x31.value()), math.floor(x32.value()), math.floor(x33.value()), math.floor(x34.value()), math.floor(x35.value()), math.floor(x36.value())],
