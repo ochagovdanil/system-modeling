@@ -1,5 +1,6 @@
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import QFont
+from tabulate import tabulate
 from pulp import *
 import math
 import sys
@@ -140,10 +141,27 @@ def on_button1_clicked():
 	widget.setMinimumWidth(750)
 	widget.setMinimumHeight(200)
 
+	# Вывод в консоль
+	consoleTable = [
+    ['На пересечение кол-во часов на выпуск продукции', 'Шпон березовый лущенный', 'Шпон с закориной', 'Шпон кусковой'],
+    ["Рабочие в бригаде №1", math.floor(x11.value()), math.floor(x12.value()), math.floor(x13.value())],
+    ['Рабочие в бригаде №2', math.floor(x21.value()), math.floor(x22.value()), math.floor(x23.value())],
+    ['Рабочие в бригаде №3', math.floor(x31.value()), math.floor(x32.value()), math.floor(x33.value())]
+	]
+
+	print("---------------------------ПРОИЗВОДСТВЕННЫЙ ОТДЕЛ. ПОЛУЧЕНО РЕШЕНИЕ!-------------------------------------------")
+	print("-------------------Задача по распределению бригад для производства продукции-----------------------------------")
+	print(tabulate(consoleTable, headers="firstrow", tablefmt="grid"))
+	print('Суммарное затраченное время (ч.): ' + str(math.floor(totalTime)))
+	print('Суммарный доход (ден.ед): ' + str(math.floor(totalIncome)))
+	print("---------------------------------------------------------------------------------------------------------------")
+
+	# Вывод в GUI окно
 	message = QMessageBox()
-	message.setWindowTitle('Получено решение!')
+	message.setWindowTitle('Производственный отдел. Получено решение!')
 	message.layout().addWidget(widget)
 	message.exec_()
+
 
 """ Задача распределения денежных средств на пиар кампанию """
 def on_button2_clicked():
@@ -172,9 +190,18 @@ def on_button2_clicked():
 	output += 'Оптимальная ТВ реклама: ' + str(math.floor(xTV.value())) + 'мин.\n'
 	output += 'Затрачено денег: ' + str(math.floor(xInternet.value() * 50 + xTV.value() * 1_000)) + 'руб.'
 
+	# Вывод в консоль
+	print("-------------------------------ОТДЕЛ МАРКЕТИНГА. ПОЛУЧЕНО РЕШЕНИЕ!---------------------------------------------")
+	print("-----------------------------Задача о распределении денежных средств ------------------------------------------")
+	print('Сбыт продукции составляет: ' + str(math.floor(xInternet.value() + xTV.value() * 25)) + ' единиц')
+	print('Оптимальная интернет реклама: ' + str(math.floor(xInternet.value())) + 'мин.')
+	print('Оптимальная ТВ реклама: ' + str(math.floor(xTV.value())) + 'мин.')
+	print('Затрачено денег: ' + str(math.floor(xInternet.value() * 50 + xTV.value() * 1_000)) + 'руб.')
+	print("---------------------------------------------------------------------------------------------------------------")
+
 	# Показываем сообщение пользователю
 	message = QMessageBox()
-	message.setWindowTitle('Получено решение!')
+	message.setWindowTitle('Отдел маркетинга. Получено решение!')
 	message.setText(output)
 	message.exec_()
 
@@ -258,8 +285,23 @@ def on_button3_clicked():
 	widget.setMinimumWidth(600)
 	widget.setMinimumHeight(180)
 
+	# Вывод в консоль
+	consoleTable = [
+    ['Склады', 'Потребитель №1', 'Потребитель №2', 'Потребитель №3'],
+    ["г. Казань", math.floor(x11.value()), math.floor(x12.value()), math.floor(x13.value())],
+    ['г. Киров', math.floor(x21.value()), math.floor(x22.value()), math.floor(x23.value())],
+    ['г. Пермь', math.floor(x31.value()), math.floor(x32.value()), math.floor(x33.value())]
+	]
+
+	print("--------------------------------СКЛАДСКОЙ ОТДЕЛ. ПОЛУЧЕНО РЕШЕНИЕ!---------------------------------------------")
+	print("-----------------------------------Задача транспортировки товара-----------------------------------------------")
+	print(tabulate(consoleTable, headers="firstrow", tablefmt="grid"))
+	print('Суммарная дальность поездки (км.): ' + str(math.floor(totalDistance)))
+	print("---------------------------------------------------------------------------------------------------------------")
+
+	# Вывод в GUI окно
 	message = QMessageBox()
-	message.setWindowTitle('Получено решение!')
+	message.setWindowTitle('Складской отдел. Получено решение!')
 	message.layout().addWidget(widget)
 	message.exec_()
 
@@ -303,9 +345,19 @@ def on_button4_clicked():
 	output += 'Кол-во заготовок 4 вида: ' + str(math.floor(x14.value())) + '\n'
 	output += 'Кол-во комплектов: ' + str(math.floor((x11.value() * a11 + x12.value() * a12 + x13.value() * a13 + x14.value() * a14) / 3))
 
+	# Вывод в консоль
+	print("---------------------------ПРОИЗВОДСТВЕННЫЙ ОТДЕЛ. ПОЛУЧЕНО РЕШЕНИЕ!-------------------------------------------")
+	print("----------------------------Задача о раскрое производимой продукции--------------------------------------------")
+	print('Кол-во заготовок 1 вида: ' + str(math.floor(x11.value())))
+	print('Кол-во заготовок 2 вида: ' + str(math.floor(x12.value())))
+	print('Кол-во заготовок 3 вида: ' + str(math.floor(x13.value())))
+	print('Кол-во заготовок 4 вида: ' + str(math.floor(x14.value())))
+	print('Кол-во комплектов: ' + str(math.floor((x11.value() * a11 + x12.value() * a12 + x13.value() * a13 + x14.value() * a14) / 3)))
+	print("---------------------------------------------------------------------------------------------------------------")
+
 	# Показываем сообщение пользователю
 	message = QMessageBox()
-	message.setWindowTitle('Получено решение!')
+	message.setWindowTitle('Производственный отдел. Получено решение!')
 	message.setText(output)
 	message.exec_()
 
@@ -483,8 +535,25 @@ def on_button5_clicked():
 	widget.setMinimumWidth(550)
 	widget.setMinimumHeight(250)
 
+	# Вывод в консоль
+	consoleTable = [
+    ['На пересечении индекс враждебности', 'Аня', 'Маша', 'Катя', 'Лиза', 'Ольга', 'Софья'],
+    ["Иван", math.floor(x11.value()), math.floor(x12.value()), math.floor(x13.value()), math.floor(x14.value()), math.floor(x15.value()), math.floor(x16.value())],
+    ['Михаил', math.floor(x21.value()), math.floor(x22.value()), math.floor(x23.value()), math.floor(x24.value()), math.floor(x25.value()), math.floor(x26.value())],
+    ['Павел', math.floor(x31.value()), math.floor(x32.value()), math.floor(x33.value()), math.floor(x34.value()), math.floor(x35.value()), math.floor(x36.value())],
+    ['Николай', math.floor(x41.value()), math.floor(x42.value()), math.floor(x43.value()), math.floor(x44.value()), math.floor(x45.value()), math.floor(x46.value())],
+    ['Алексей', math.floor(x51.value()), math.floor(x52.value()), math.floor(x53.value()), math.floor(x54.value()), math.floor(x55.value()), math.floor(x56.value())],
+    ['Петр', math.floor(x61.value()), math.floor(x62.value()), math.floor(x63.value()), math.floor(x64.value()), math.floor(x65.value()), math.floor(x66.value())]
+	]
+
+	print("------------------------------ОТДЕЛ КАДРОВ. ПОЛУЧЕНО РЕШЕНИЕ!--------------------------------------------------")
+	print("----------------Задача подбора пар сотрудников на основе индекса враждебности----------------------------------")
+	print(tabulate(consoleTable, headers="firstrow", tablefmt="grid"))
+	print("---------------------------------------------------------------------------------------------------------------")
+
+	# Вывод в GUI окно
 	message = QMessageBox()
-	message.setWindowTitle('Получено решение!')
+	message.setWindowTitle('Отдел кадров. Получено решение!')
 	message.layout().addWidget(widget)
 	message.exec_()
 
