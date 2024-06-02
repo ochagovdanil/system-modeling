@@ -4,6 +4,10 @@ from tabulate import tabulate
 from pulp import *
 import math
 import sys
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+from sklearn.linear_model import LinearRegression
 
 
 def main():
@@ -32,6 +36,7 @@ def main():
 	button3 = QPushButton("Складской отдел")
 	button4 = QPushButton("Производственный отдел (нарезка комплектов)")
 	button5 = QPushButton("Отдел кадров")
+	button6 = QPushButton("Отдел финансов")
 
 	# Привязываем слушатель (event) к каждой кнопке при ее нажатии
 	button1.clicked.connect(on_button1_clicked)
@@ -39,6 +44,7 @@ def main():
 	button3.clicked.connect(on_button3_clicked)
 	button4.clicked.connect(on_button4_clicked)
 	button5.clicked.connect(on_button5_clicked)
+	button6.clicked.connect(on_button6_clicked)
 
 	# Добавляем элементы в сетку
 	layout.addWidget(label)
@@ -47,6 +53,7 @@ def main():
 	layout.addWidget(button3)
 	layout.addWidget(button4)
 	layout.addWidget(button5)
+	layout.addWidget(button6)
 
 	window.setLayout(layout)
 
@@ -556,6 +563,41 @@ def on_button5_clicked():
 	message.setWindowTitle('Отдел кадров. Получено решение!')
 	message.layout().addWidget(widget)
 	message.exec_()
+
+
+""" Вывод графика лучшей модели регрессии """
+def on_button6_clicked():
+	# Данные из Excel таблицы
+	years = np.array([2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023]).reshape(-1, 1)
+	profits = np.array([800000000, 805000000, 810000000, 900000000, 920000000, 950000000, 990000000, 1100000000, 1000000000, 1300000000])
+
+	# Создаем датафрейм
+	data = pd.DataFrame({'Years': years.flatten(), 'Profits': profits})
+
+	# Линейная регрессия
+	model = LinearRegression()
+	model.fit(years, profits)
+	trendline = model.predict(years)
+
+	# Рисуем график
+	plt.figure(figsize=(10, 6))
+	plt.scatter(years, profits, color='blue', label='Исходные данные')
+	plt.plot(years, trendline, color='orange', linestyle='--', label='Линия тренда')
+	plt.title('Линейная')
+	plt.xlabel('Годы (x)')
+	plt.ylabel('Прибыль, руб. (y)')
+	plt.legend()
+
+	# Добавляем уравнение и R^2 значение на график
+	equation_text = f'y = {model.coef_[0]:.0e}x + {model.intercept_:.0e}\n$R^2$ = {model.score(years, profits):.4f}'
+	plt.text(2014, 1200000000, equation_text, fontsize=12)
+
+	# Форматируем y-ось с запятыми и знаком рубля
+	plt.gca().get_yaxis().set_major_formatter(plt.FuncFormatter(lambda x, loc: f'{x:,.0f}₽'))
+
+	# Показываем график
+	plt.grid(True)
+	plt.show()
 
 
 if __name__ == '__main__':
